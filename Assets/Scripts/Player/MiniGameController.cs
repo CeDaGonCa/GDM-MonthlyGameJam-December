@@ -1,22 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class MiniGameController : MonoBehaviour
 {
-    private PlayerInput playerInput;
     private Camera mainCamera;
-    InputAction clickAction;
     private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
-        //Cursor.lockState = CursorLockMode.Confined;
-        clickAction = playerInput.actions["Click"];
-        //clickAction.performed += _ => DetectObject();
         mainCamera = Camera.main;
     }
-    private void Update()
+    public void HandleUpdate()
     {
-        if (clickAction.WasPressedThisFrame())
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             DetectObject();
         }

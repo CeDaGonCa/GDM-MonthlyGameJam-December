@@ -9,13 +9,15 @@ public class FreeLookCamera : MonoBehaviour
     public float maxYaw = 80f;
     public float minPitch = -80f;
     public float maxPitch = 80f;
-    
 
     private float yaw;
     private float pitch;
-    
-
-    void Start()
+    private CameraRaycast cameraRaycast;
+    private void Awake()
+    {
+        cameraRaycast = GetComponent<CameraRaycast>();
+    }
+    public void HandleStart()
     {
         Vector3 rotation = transform.eulerAngles;
         yaw = rotation.y;
@@ -24,7 +26,7 @@ public class FreeLookCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    public void HandleUpdate()
     {
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
 
@@ -35,5 +37,6 @@ public class FreeLookCamera : MonoBehaviour
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
 
         transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+        cameraRaycast.HandleUpdate();
     }
 }

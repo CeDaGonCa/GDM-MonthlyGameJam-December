@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class CameraRaycast : MonoBehaviour
@@ -15,7 +16,7 @@ public class CameraRaycast : MonoBehaviour
         highlight.gameObject.SetActive(false);
     }
 
-    void Update()
+    public void HandleUpdate()
     {
         Ray ray = cam.ViewportPointToRay(
             new Vector3(0.5f, 0.5f, 0f)
@@ -34,7 +35,19 @@ public class CameraRaycast : MonoBehaviour
                 );
 
                 highlight.position = screenPos;
-                
+
+                if (Mouse.current.leftButton.wasPressedThisFrame)
+                {
+                    MiniGameTrigger miniGameTrigger = hit.collider.GetComponent<MiniGameTrigger>();
+                    if(miniGameTrigger == null)
+                    {
+                        Debug.Log("Something is wrong with triggers");
+                    } else
+                    {
+                        GameController.Instance.ChangeState(GameState.MINIGAME);
+                        miniGameTrigger.StartGame();
+                    }
+                }
                 // currently all its doing is setting the UI piece to be true, so probably add something here to do something when the raycast is detecting a thing
                 // i.e. "If i press a button in this state where i am hovering over smth interactable, start the minigame processs"
                 // alternatively u can move all this logic out of Update and just have a "OnHighlight" and "OnUnhighlight" event, but meh its prolly fine as is 

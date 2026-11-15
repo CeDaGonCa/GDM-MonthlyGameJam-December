@@ -10,7 +10,7 @@ public class SineWaveGame : MonoBehaviour
     float EndCompletionTime = 0f;
     void Start()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
         EndCompletionTime = Time.time + completionTime;
     }
     bool GameWon = false;

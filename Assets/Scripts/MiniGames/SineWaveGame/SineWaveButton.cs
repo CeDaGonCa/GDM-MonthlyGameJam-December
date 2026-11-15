@@ -6,7 +6,6 @@ public class SineWaveButton : MonoBehaviour, Interactable
     [SerializeField] bool Adds;
     public void Interact()
     {
-        
         sineWave.ChangeFrequency(Adds);
     }
 }
