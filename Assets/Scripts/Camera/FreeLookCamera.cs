@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class FreeLookCamera : MonoBehaviour
 {
     public float sensitivity = 0.15f;
-    
+
     public float minYaw = -80f;
     public float maxYaw = 80f;
     public float minPitch = -80f;

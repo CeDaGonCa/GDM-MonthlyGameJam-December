@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
 
 public class MiniGameTrigger : MonoBehaviour
 {
     [SerializeField] GameObject miniGame;
+
+    public Action<GameObject> OnGameStart;
     public void StartGame()
     {
-        var game = Instantiate(miniGame);
-        game.SetActive(true);
+        OnGameStart.Invoke(miniGame);
     }
 }

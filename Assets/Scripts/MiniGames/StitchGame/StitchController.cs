@@ -3,7 +3,7 @@ using UnityEngine;
 public class StitchController : MonoBehaviour
 {
     [SerializeField] int neededStitches = 4;
-    public static StitchController Instance {get; private set;}
+    public static StitchController Instance { get; private set; }
 
     void Awake()
     {
@@ -13,7 +13,7 @@ public class StitchController : MonoBehaviour
     public void StitchDone()
     {
         stitchCounter++;
-        if(stitchCounter >= neededStitches)
+        if (stitchCounter >= neededStitches)
         {
             Debug.Log("You Won");
         }

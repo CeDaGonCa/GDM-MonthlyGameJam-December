@@ -12,21 +12,21 @@ public class Stitch : MonoBehaviour
 
     void Start()
     {
-        camera = Camera.main;
         startPoint = transform.parent.position;
         startPosition = transform.position;
+        camera = MiniGameController.Instance.MiniGameCamera;
     }
     void OnMouseDrag()
     {
-        Vector3 newPos = camera.ScreenToWorldPoint(new Vector3(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue(),0));
+        Vector3 newPos = camera.ScreenToWorldPoint(new Vector3(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue(), 0));
         newPos.z = 0;
 
         // Check for connection points
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(newPos,.2f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(newPos, .2f);
 
-        foreach(Collider2D collider in colliders)
+        foreach (Collider2D collider in colliders)
         {
-            if(collider.gameObject == gameObject) continue;
+            if (collider.gameObject == gameObject) continue;
             UpdateWire(collider.transform.position);
             if (transform.parent.name.Equals(collider.transform.parent.name))
             {
@@ -60,5 +60,5 @@ public class Stitch : MonoBehaviour
         float dist = Vector2.Distance(startPoint, newPos);
         stitchEnd.size = new Vector2(dist, stitchEnd.size.y);
     }
-    
+
 }

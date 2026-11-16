@@ -3,10 +3,26 @@ using UnityEngine.InputSystem;
 
 public class MiniGameController : MonoBehaviour
 {
+    [SerializeField] GameObject miniGameSection;
+    [SerializeField] Camera miniGameCamera;
+
+    public static MiniGameController Instance { get; private set; }
     private Camera mainCamera;
     private void Awake()
     {
         mainCamera = Camera.main;
+        if (Instance != null) Debug.Log("There is already a GameController in play");
+        Instance = this;
+    }
+    public void StartGame()
+    {
+        mainCamera.gameObject.SetActive(false);
+        miniGameSection.SetActive(true);
+    }
+    public void EndGame()
+    {
+        miniGameSection.SetActive(false);
+        mainCamera.gameObject.SetActive(true);
     }
     public void HandleUpdate()
     {
@@ -27,4 +43,5 @@ public class MiniGameController : MonoBehaviour
             }
         }
     }
+    public Camera MiniGameCamera => miniGameCamera;
 }
