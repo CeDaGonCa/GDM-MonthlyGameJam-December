@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class MiniGameTrigger : MonoBehaviour
 {
-    [SerializeField] GameObject miniGame;
-
-    public Action<GameObject> OnGameStart;
+    [SerializeField] MinigameData _minigameData;
+    public Action<MinigameData> OnGameStart;
+    
     public void StartGame()
     {
-        OnGameStart.Invoke(miniGame);
+        OnGameStart.Invoke(_minigameData);
     }
 }

@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FreeLookCamera : MonoBehaviour
+public class FreeLookCameraController : MonoBehaviour
 {
+    [Header("Design Values")]
     public float sensitivity = 0.15f;
 
     public float minYaw = -80f;
@@ -13,17 +14,27 @@ public class FreeLookCamera : MonoBehaviour
     private float yaw;
     private float pitch;
     private CameraRaycast cameraRaycast;
+
+    [Header("State")] 
+    private bool IsInFreeLook = true;
+    
     private void Awake()
     {
         cameraRaycast = GetComponent<CameraRaycast>();
     }
     public void HandleStart()
     {
+        IsInFreeLook = true;
         Vector3 rotation = transform.eulerAngles;
         yaw = rotation.y;
         pitch = rotation.x;
 
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void HandleExit()
+    {
+        IsInFreeLook = false;
     }
 
     public void HandleUpdate()

@@ -4,6 +4,10 @@ public class StitchRandomizer : MonoBehaviour
 {
     void Awake()
     {
+        Randomize();
+    }   
+    public void Randomize()
+    {
         for(int i = 0; i < transform.childCount; i++)
         {
             int newSpot = Random.Range(0,transform.childCount);

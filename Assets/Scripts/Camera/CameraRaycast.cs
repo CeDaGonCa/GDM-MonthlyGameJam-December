@@ -45,7 +45,6 @@ public class CameraRaycast : MonoBehaviour
                     }
                     else
                     {
-                        GameController.Instance.ChangeState(GameState.MINIGAME);
                         miniGameTrigger.StartGame();
                     }
                 }

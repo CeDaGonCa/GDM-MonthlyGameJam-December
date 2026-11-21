@@ -1,29 +1,43 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MiniGameController : MonoBehaviour
 {
-    [SerializeField] GameObject miniGameSection;
-    [SerializeField] Camera miniGameCamera;
-
+    [Header("MiniGames")] 
+    public MinigameTypeController StitchMinigame;
+    // other games
+    
+    [Header("State")]
     public static MiniGameController Instance { get; private set; }
     private Camera mainCamera;
+    private MinigameTypeController currentMinigame;
+    
     private void Awake()
     {
         mainCamera = Camera.main;
         if (Instance != null) Debug.Log("There is already a GameController in play");
         Instance = this;
     }
-    public void StartGame()
+    public void StartGame(MinigameData minigameData)
     {
-        mainCamera.gameObject.SetActive(false);
-        miniGameSection.SetActive(true);
+        if (minigameData.GetType() == typeof(StitchMinigameData))
+        {
+            currentMinigame = StitchMinigame;
+            UIController.instance.ToggleClipboard(true);
+            StitchMinigame.transform.DOLocalMoveX(0, 0.5f);
+            StitchMinigame.OnMinigameComplete += EndGame;
+        }
     }
+    
     public void EndGame()
     {
-        miniGameSection.SetActive(false);
-        mainCamera.gameObject.SetActive(true);
+        currentMinigame.OnMinigameComplete -= EndGame;
+        currentMinigame.transform.DOLocalMoveX(-1.5f, 0.5f);
+        UIController.instance.ToggleClipboard(false);
+        GameController.Instance.ChangeState(GameState.FREECAMERA);
     }
+    
     public void HandleUpdate()
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -43,5 +57,4 @@ public class MiniGameController : MonoBehaviour
             }
         }
     }
-    public Camera MiniGameCamera => miniGameCamera;
 }
