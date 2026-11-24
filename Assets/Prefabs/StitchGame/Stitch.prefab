@@ -388,7 +388,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &299975400177601069
 MonoBehaviour:
@@ -403,4 +403,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Stitch
   stitchEnd: {fileID: 8800945160531550989}
-  connectConstant: 2
+  snapRadius: 0.2

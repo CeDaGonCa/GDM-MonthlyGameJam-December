@@ -2,10 +2,16 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum MiniGameType
+{
+    Stitch, Wave, Slider
+}
+
+// Controller when the game is in MiniGameMode, and manages which MiniGame is being displayed
 public class MiniGameController : MonoBehaviour
 {
     [Header("MiniGames")] 
-    public MinigameTypeController StitchMinigame;
+    public StitchController StitchMinigame;
     // other games
     
     [Header("State")]
@@ -18,24 +24,37 @@ public class MiniGameController : MonoBehaviour
         mainCamera = Camera.main;
         if (Instance != null) Debug.Log("There is already a GameController in play");
         Instance = this;
+        
+        // subscribe once at the start for each
+        StitchMinigame.OnMinigameComplete += CompleteMinigame;
+        // WaveMinigame.OnMinigameComplete += CompleteMinigame;
+        // SliderMinigame.OnMinigameComplete += CompleteMinigame;
     }
-    public void StartGame(MinigameData minigameData)
+    
+    public void StartGame(MinigameTaskData minigameData)
     {
+        UIController.instance.ToggleMiniGame(true);
+        
         if (minigameData.GetType() == typeof(StitchMinigameData))
         {
             currentMinigame = StitchMinigame;
-            UIController.instance.ToggleClipboard(true);
             StitchMinigame.transform.DOLocalMoveX(0, 0.5f);
-            StitchMinigame.OnMinigameComplete += EndGame;
-        }
+            StitchMinigame.StartGame();
+        } 
+        // elseif minigametype ...
     }
-    
-    public void EndGame()
+
+    private void CompleteMinigame(MiniGameType type, bool success)
     {
-        currentMinigame.OnMinigameComplete -= EndGame;
         currentMinigame.transform.DOLocalMoveX(-1.5f, 0.5f);
-        UIController.instance.ToggleClipboard(false);
+        UIController.instance.ToggleMiniGame(false);
         GameController.Instance.ChangeState(GameState.FREECAMERA);
+        
+        // failed minigame, lose some health
+        if (!success)
+        {
+            GameController.Instance.LoseTime();
+        }
     }
     
     public void HandleUpdate()

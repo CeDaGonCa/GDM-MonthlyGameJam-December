@@ -1,51 +1,65 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Stitch : MonoBehaviour
 {
     [SerializeField] SpriteRenderer stitchEnd;
-    [SerializeField] float snapRadius = 0.2f;
+    [SerializeField] float snapRadius = 0.2f;   // in the parent's local units
+
+    static readonly List<Stitch> all = new List<Stitch>();
 
     private Camera cam;
     private Transform anchor;
-    private Vector3 planeNormal;
     private Vector3 homeLocalPos;
     private Quaternion homeLocalRot;
+    private Vector3 homeLocalEuler;
     private Vector2 homeSize;
+    private bool done;
 
+    void OnEnable()  => all.Add(this);
+    void OnDisable() => all.Remove(this);
+
+    void Awake()
+    {
+        homeSize = stitchEnd.size;
+    }
+    
     void Start()
     {
-        Debug.Log("hello what");
         cam = Camera.main;
         anchor = transform.parent;
 
-        // remember the tilted panel's facing direction and the resting pose
-        planeNormal = transform.forward;
         homeLocalPos = transform.localPosition;
         homeLocalRot = transform.localRotation;
-        homeSize = stitchEnd.size;
+        homeLocalEuler = transform.localEulerAngles;
     }
 
     void OnMouseDrag()
     {
+        if (done) return;
+
+        // 1. mouse ray -> hit point on the panel plane (the parent's XY plane)
         Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Plane plane = new Plane(planeNormal, anchor.position);
+        Plane plane = new Plane(anchor.forward, anchor.position);
+        if (!plane.Raycast(ray, out float enter)) return;
 
-        if (!plane.Raycast(ray, out float enter)) return;   // was inverted
-        Vector3 worldPos = ray.GetPoint(enter);
-        
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(worldPos, snapRadius * transform.lossyScale.x);
-        foreach (Collider2D col in colliders)
+        // 2. world -> 2D coordinates on the panel
+        Vector2 target = anchor.InverseTransformPoint(ray.GetPoint(enter));
+
+        // 3. snap check, all in panel 2D space
+        foreach (Stitch other in all)
         {
-            if (col.gameObject == gameObject) continue;
-            Stitch other = col.GetComponent<Stitch>();
-            if (other == null) continue;
+            if (other == this || other.done) continue;
 
-            UpdateWire(other.transform.position);
+            Vector2 otherPos = anchor.InverseTransformPoint(other.transform.position);
+            if (Vector2.Distance(target, otherPos) > snapRadius) continue;
 
-            if (transform.parent.name.Equals(col.transform.parent.name))
+            UpdateWire(otherPos);
+
+            if (transform.parent.name.Equals(other.transform.parent.name))
             {
-                Debug.Log("succesful stitch");
+                Debug.Log("successful stitch");
                 StitchController.Instance.StitchDone();
                 other.Done();
                 Done();
@@ -53,35 +67,43 @@ public class Stitch : MonoBehaviour
             return;
         }
 
-        UpdateWire(worldPos);
+        UpdateWire(target);
     }
 
     public void Done()
     {
-        Destroy(this);
+        done = true;
     }
 
-    private void OnMouseUp()
+    public void ResetStitch()
     {
-        // reset to the resting pose
+        done = false;
         transform.localPosition = homeLocalPos;
         transform.localRotation = homeLocalRot;
         stitchEnd.size = homeSize;
     }
 
-    private void UpdateWire(Vector3 newPos)
+    private void OnMouseUp()
     {
-        Vector3 start = anchor.position;
-        Vector3 direction = Vector3.ProjectOnPlane(newPos - start, planeNormal);
-        if (direction.sqrMagnitude < 0.0001f) return;
+        if (done) return;
+        ResetStitch();
+    }
 
-        transform.position = start + direction;
+    // target is a 2D point in the parent's local space (wire starts at the parent's origin)
+    private void UpdateWire(Vector2 target)
+    {
+        if (target.sqrMagnitude < 0.0001f) return;
 
-        // point right along the wire while staying flat on the tilted panel
-        transform.rotation = Quaternion.LookRotation(
-            planeNormal, Vector3.Cross(planeNormal, direction));
+        // only local X, Y position change (Z stays put)
+        transform.localPosition = new Vector3(target.x, target.y, homeLocalPos.z);
 
+        // only local Z rotation changes (X and Y stay at their rest values)
+        float angle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
+        transform.localRotation = Quaternion.Euler(homeLocalEuler.x, homeLocalEuler.y, angle);
+
+        // stretch the sprite to span the distance (measured in world units, like the original)
+        float worldLength = Vector3.Distance(transform.position, anchor.position);
         float scaleX = stitchEnd.transform.lossyScale.x;
-        stitchEnd.size = new Vector2(direction.magnitude / scaleX, stitchEnd.size.y);
+        stitchEnd.size = new Vector2(worldLength / scaleX, stitchEnd.size.y);
     }
 }

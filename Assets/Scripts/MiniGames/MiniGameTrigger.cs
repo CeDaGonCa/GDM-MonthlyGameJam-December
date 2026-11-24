@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class MiniGameTrigger : MonoBehaviour
 {
-    [SerializeField] MinigameData _minigameData;
-    public Action<MinigameData> OnGameStart;
+    [SerializeField] MinigameTaskData _minigameData;
+    public MinigameTaskData MinigameData => _minigameData;
+        
+    public Action<MinigameTaskData> OnGameStart;
     
     public void StartGame()
     {
