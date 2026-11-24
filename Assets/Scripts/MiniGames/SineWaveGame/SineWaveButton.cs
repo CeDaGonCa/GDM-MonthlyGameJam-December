@@ -4,8 +4,15 @@ public class SineWaveButton : MonoBehaviour, Interactable
 {
     [SerializeField] SineWave sineWave;
     [SerializeField] bool Adds;
+    [SerializeField] bool changesFreq;
     public void Interact()
     {
-        sineWave.ChangeFrequency(Adds);
+        Debug.Log("Interacted on raycast THIS SHOULDN'T HAPPEN");
+        sineWave.ChangeValues(Adds,changesFreq);
+    }
+    void OnMouseDown()
+    {
+        //Debug.Log("Interacted on mouse down");
+        sineWave.ChangeValues(Adds,changesFreq);
     }
 }

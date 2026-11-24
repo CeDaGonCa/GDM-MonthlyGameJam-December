@@ -10,15 +10,16 @@ public enum MiniGameType
 // Controller when the game is in MiniGameMode, and manages which MiniGame is being displayed
 public class MiniGameController : MonoBehaviour
 {
-    [Header("MiniGames")] 
-    public StitchController StitchMinigame;
-    // other games
-    
+    [Header("MiniGames")]
+    public MinigameTypeController StitchMinigame;
+    public MinigameTypeController SineWaveGame;
+    public MinigameTypeController BarCutMinigame;
+
     [Header("State")]
     public static MiniGameController Instance { get; private set; }
     private Camera mainCamera;
     private MinigameTypeController currentMinigame;
-    
+
     private void Awake()
     {
         mainCamera = Camera.main;
@@ -40,12 +41,24 @@ public class MiniGameController : MonoBehaviour
             currentMinigame = StitchMinigame;
             StitchMinigame.transform.DOLocalMoveX(0, 0.5f);
             StitchMinigame.StartGame();
-        } 
-        // elseif minigametype ...
+        }
+        else if (minigameData.GetType() == typeof(SineWaveMinigameData))
+        {
+            currentMinigame = SineWaveGame;
+            currentMinigame.gameObject.SetActive(true);
+            UIController.instance.ToggleMiniGame(true);
+            SineWaveGame.transform.DOLocalMoveX(0.56f, 0.5f);
+        }
+        else if (minigameData.GetType() == typeof(BarCutMinigameData))
+        {
+            currentMinigame = BarCutMinigame;
+            currentMinigame.gameObject.SetActive(true);
+            UIController.instance.ToggleMiniGame(true);
+            BarCutMinigame.transform.DOLocalMoveX(0, 0.5f);
+        }
     }
 
-    private void CompleteMinigame(MiniGameType type, bool success)
-    {
+    private void CompleteMinigame(MiniGameType type, bool success){
         currentMinigame.transform.DOLocalMoveX(-1.5f, 0.5f);
         UIController.instance.ToggleMiniGame(false);
         GameController.Instance.ChangeState(GameState.FREECAMERA);
@@ -56,7 +69,7 @@ public class MiniGameController : MonoBehaviour
             GameController.Instance.LoseTime();
         }
     }
-    
+
     public void HandleUpdate()
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
