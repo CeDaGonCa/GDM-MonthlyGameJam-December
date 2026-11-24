@@ -28,8 +28,8 @@ public class MiniGameController : MonoBehaviour
         
         // subscribe once at the start for each
         StitchMinigame.OnMinigameComplete += CompleteMinigame;
-        // WaveMinigame.OnMinigameComplete += CompleteMinigame;
-        // SliderMinigame.OnMinigameComplete += CompleteMinigame;
+        SineWaveGame.OnMinigameComplete += CompleteMinigame;
+        BarCutMinigame.OnMinigameComplete += CompleteMinigame;
     }
     
     public void StartGame(MinigameTaskData minigameData)
@@ -48,6 +48,7 @@ public class MiniGameController : MonoBehaviour
             currentMinigame.gameObject.SetActive(true);
             UIController.instance.ToggleMiniGame(true);
             SineWaveGame.transform.DOLocalMoveX(0.56f, 0.5f);
+            currentMinigame.StartGame();
         }
         else if (minigameData.GetType() == typeof(BarCutMinigameData))
         {
@@ -55,6 +56,7 @@ public class MiniGameController : MonoBehaviour
             currentMinigame.gameObject.SetActive(true);
             UIController.instance.ToggleMiniGame(true);
             BarCutMinigame.transform.DOLocalMoveX(0, 0.5f);
+            currentMinigame.StartGame();
         }
     }
 

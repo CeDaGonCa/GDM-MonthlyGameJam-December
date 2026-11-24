@@ -1,6 +1,7 @@
 
+using System;
 using UnityEngine;
-using UnityEngine.iOS;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(LineRenderer))]
 public class SineWave : MonoBehaviour
@@ -15,6 +16,9 @@ public class SineWave : MonoBehaviour
     [SerializeField] float margins = 2f;
 
     [SerializeField] Transform device;
+
+    public Action OnSineWaveChanged;
+    
     private LineRenderer lineRenderer;
     void Awake()
     {
@@ -64,6 +68,8 @@ public class SineWave : MonoBehaviour
         {
             amplitude = Mathf.Clamp(amplitude + (Adds ? 1 : -1) * changeAmount, changeAmount, frequencyLimit);
         }
+        
+        OnSineWaveChanged?.Invoke();
     }
     public float Frequency => frequency;
 }

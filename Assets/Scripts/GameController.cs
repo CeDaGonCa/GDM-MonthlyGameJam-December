@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
@@ -67,13 +68,20 @@ public class GameController : MonoBehaviour
         // prolly would want to do an actual statemachine type of thing
         if (newState == State) 
             return; // returning if the same state
+
+        IEnumerator SwitchState()
+        {
+            yield return null;
+            
+            if (newState == GameState.MINIGAME)
+                Cursor.lockState = CursorLockMode.Confined;
+            else if (newState == GameState.FREECAMERA)
+                Cursor.lockState = CursorLockMode.Locked;
         
-        if (newState == GameState.MINIGAME)
-            Cursor.lockState = CursorLockMode.Confined;
-        else if (newState == GameState.FREECAMERA)
-            Cursor.lockState = CursorLockMode.Locked;
+            State = newState;
+        }
         
-        State = newState;
+        StartCoroutine(SwitchState());
     }
 
     // ignore this, this UI script should NOT be in manager, have more layers usually but for this idrc

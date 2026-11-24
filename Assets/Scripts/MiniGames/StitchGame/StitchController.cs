@@ -34,14 +34,11 @@ public class StitchController : MinigameTypeController
         }
     }
 
-    public void StartGame()
+    public override void StartGame()
     {
-        MiniGameCompleteIndicator.alpha = 0;
-        stitchCounter = 0;
-        bIsBeingPlayed = true;
-        TimeRemaining = MiniGameTime;
-        Timer.value = 1;
+        base.StartGame();
         
+        stitchCounter = 0;
         LeftSide.ResetStitches();
         RightSide.ResetStitches();
     }

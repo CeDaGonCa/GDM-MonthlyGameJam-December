@@ -19,6 +19,14 @@ public class BarCutGame : MinigameTypeController
     }
     private int direction = 1;
     bool gameWon = false;
+
+    public override void StartGame()
+    {
+        base.StartGame();
+        
+        Debug.Log("Starting game");
+    }
+
     void Update()
     {
         if(gameWon) return;
@@ -48,6 +56,6 @@ public class BarCutGame : MinigameTypeController
     {
         Debug.Log("You won");
         gameWon = true;
-        OnMinigameComplete?.Invoke();
+        OnMinigameComplete?.Invoke(MiniGameType.Slider, true);
     }
 }

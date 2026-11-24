@@ -5,11 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Generic controller for minigames
-public class MinigameTypeController : MonoBehaviour
+public abstract class MinigameTypeController : MonoBehaviour
 {
     [Header("Generic Minigame Values")]
     protected MiniGameType minigameType;
-    public float MiniGameTime;
+    public float MiniGameTime = 15f;
     
     public Action<MiniGameType, bool> OnMinigameComplete;
     [SerializeField] protected CanvasGroup MiniGameCompleteIndicator;
@@ -18,6 +18,14 @@ public class MinigameTypeController : MonoBehaviour
     // Game State
     protected float TimeRemaining;
     protected bool bIsBeingPlayed = false;
+
+    public virtual void StartGame()
+    {
+        MiniGameCompleteIndicator.alpha = 0;
+        bIsBeingPlayed = true;
+        TimeRemaining = MiniGameTime;
+        Timer.value = 1;
+    }
     
     protected void FinishMiniGame()
     {
