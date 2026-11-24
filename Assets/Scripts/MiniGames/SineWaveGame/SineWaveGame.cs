@@ -21,7 +21,7 @@ public class SineWaveGame : MinigameTypeController
         if (Mathf.Abs(ReferenceWave.Frequency - PlayerWave.Frequency) <= tolerance)
         {
             GameWon = true;
-            OnMinigameComplete?.Invoke(MiniGameType.Wave, true);
+            FinishMiniGame();
         }
     }
 

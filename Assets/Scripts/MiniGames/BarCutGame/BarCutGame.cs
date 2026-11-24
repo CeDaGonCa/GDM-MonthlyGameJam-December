@@ -56,6 +56,6 @@ public class BarCutGame : MinigameTypeController
     {
         Debug.Log("You won");
         gameWon = true;
-        OnMinigameComplete?.Invoke(MiniGameType.Slider, true);
+        FinishMiniGame();
     }
 }
