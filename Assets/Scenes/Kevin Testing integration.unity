@@ -1406,6 +1406,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3922525245638630357, guid: 0409aea3f002e72469d5efec811fc004, type: 3}
+      propertyPath: pointerSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8897441238136648960, guid: 0409aea3f002e72469d5efec811fc004, type: 3}
       propertyPath: m_Name
       value: BarCutGame
