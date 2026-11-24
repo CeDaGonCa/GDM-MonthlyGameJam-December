@@ -6,7 +6,8 @@ public class MiniGameController : MonoBehaviour
 {
     [Header("MiniGames")]
     public MinigameTypeController StitchMinigame;
-    public SineWaveGame SineWaveGame;
+    public MinigameTypeController SineWaveGame;
+    public MinigameTypeController BarCutMinigame;
     // other games
 
     [Header("State")]
@@ -35,7 +36,16 @@ public class MiniGameController : MonoBehaviour
             currentMinigame.gameObject.SetActive(true);
             UIController.instance.ToggleClipboard(true);
             SineWaveGame.transform.DOLocalMoveX(0.56f, 0.5f);
-            SineWaveGame.OnMinigameComplete += EndGame; 
+            SineWaveGame.OnMinigameComplete += EndGame;
+        }
+        else if (minigameData.GetType() == typeof(BarCutMinigameData))
+        {
+            currentMinigame = BarCutMinigame;
+            currentMinigame.gameObject.SetActive(true);
+            UIController.instance.ToggleClipboard(true);
+            BarCutMinigame.transform.DOLocalMoveX(0, 0.5f);
+            BarCutMinigame.OnMinigameComplete += EndGame;
+
         }
     }
 

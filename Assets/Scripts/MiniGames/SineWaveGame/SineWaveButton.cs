@@ -12,7 +12,7 @@ public class SineWaveButton : MonoBehaviour, Interactable
     }
     void OnMouseDown()
     {
-        Debug.Log("Interacted on mouse down");
+        //Debug.Log("Interacted on mouse down");
         sineWave.ChangeValues(Adds,changesFreq);
     }
 }
