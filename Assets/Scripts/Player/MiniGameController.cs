@@ -4,15 +4,16 @@ using UnityEngine.InputSystem;
 
 public class MiniGameController : MonoBehaviour
 {
-    [Header("MiniGames")] 
+    [Header("MiniGames")]
     public MinigameTypeController StitchMinigame;
+    public SineWaveGame SineWaveGame;
     // other games
-    
+
     [Header("State")]
     public static MiniGameController Instance { get; private set; }
     private Camera mainCamera;
     private MinigameTypeController currentMinigame;
-    
+
     private void Awake()
     {
         mainCamera = Camera.main;
@@ -28,8 +29,16 @@ public class MiniGameController : MonoBehaviour
             StitchMinigame.transform.DOLocalMoveX(0, 0.5f);
             StitchMinigame.OnMinigameComplete += EndGame;
         }
+        else if (minigameData.GetType() == typeof(SineWaveMinigameData))
+        {
+            currentMinigame = SineWaveGame;
+            currentMinigame.gameObject.SetActive(true);
+            UIController.instance.ToggleClipboard(true);
+            SineWaveGame.transform.DOLocalMoveX(0.56f, 0.5f);
+            SineWaveGame.OnMinigameComplete += EndGame; 
+        }
     }
-    
+
     public void EndGame()
     {
         currentMinigame.OnMinigameComplete -= EndGame;
@@ -37,7 +46,7 @@ public class MiniGameController : MonoBehaviour
         UIController.instance.ToggleClipboard(false);
         GameController.Instance.ChangeState(GameState.FREECAMERA);
     }
-    
+
     public void HandleUpdate()
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)

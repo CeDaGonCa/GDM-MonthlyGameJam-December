@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SineWaveGame : MonoBehaviour
+public class SineWaveGame : MinigameTypeController
 {
     [SerializeField] float tolerance = 0.02f;
     [SerializeField] float completionTime = 5f;
@@ -23,6 +23,7 @@ public class SineWaveGame : MonoBehaviour
             if (EndCompletionTime <= Time.time)
             {
                 Debug.Log("Won game");
+                OnMinigameComplete?.Invoke();
                 GameWon = true;
             }
         }

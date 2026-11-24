@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "StitchMinigameData")]
+[CreateAssetMenu(menuName = "MiniGames/StitchMinigameData")]
 public class StitchMinigameData : MinigameData
 {
     public Sprite BackgroundSprite;
