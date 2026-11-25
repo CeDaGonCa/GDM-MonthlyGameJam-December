@@ -35,9 +35,10 @@ public class SineWave : MonoBehaviour
         RandomizeWave();
         SetUp = true;
     }
-    public void RandomizeWave()
+    public float RandomizeWave()
     {
         frequency = Random.Range(1, (int)(frequencyLimit / ChangeAmount)) * ChangeAmount;
+        return frequency;
     }
 
 

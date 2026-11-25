@@ -414,7 +414,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StitchController
   MiniGameTime: 15
+  Instructions: Match all the stitches!
   MiniGameCompleteIndicator: {fileID: 1414820626055987042}
+  MiniGameInstructions: {fileID: 4677092256733352665}
   Timer: {fileID: 5257271412795284569}
   neededStitches: 4
   LeftSide: {fileID: 8555446641853662849}

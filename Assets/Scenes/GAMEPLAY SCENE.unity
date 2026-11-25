@@ -463,6 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameTrigger
   _minigameData: {fileID: 11400000, guid: a541f7ebd3ab9a04c9ecf14b25d66485, type: 2}
+  _isActive: 1
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -752,6 +753,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3922525245638630357, guid: 0409aea3f002e72469d5efec811fc004, type: 3}
+      propertyPath: Instructions
+      value: Time the bar!
+      objectReference: {fileID: 0}
     - target: {fileID: 5148677412565957939, guid: 0409aea3f002e72469d5efec811fc004, type: 3}
       propertyPath: m_Alpha
       value: 1
@@ -895,6 +900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameTrigger
   _minigameData: {fileID: 11400000, guid: c6ec80a6bf447e94eb7f4e895d273203, type: 2}
+  _isActive: 1
 --- !u!1001 &840686519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1722,6 +1728,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8175429404623629824, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
+      propertyPath: Instructions
+      value: Match all the wavelengths
+      objectReference: {fileID: 0}
     - target: {fileID: 8508841938055110050, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
       propertyPath: m_text
       value: OPERATION COMPLETE
@@ -1944,6 +1954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameTrigger
   _minigameData: {fileID: 11400000, guid: 4f0a2a2c955e23a42b7b8c5d42d19f9c, type: 2}
+  _isActive: 1
 --- !u!135 &1847866357
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2146,6 +2157,10 @@ PrefabInstance:
     - target: {fileID: 2616524015456786120, guid: 039a6c04e687d5f48806fbf9bb26eb24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2675774384660514477, guid: 039a6c04e687d5f48806fbf9bb26eb24, type: 3}
+      propertyPath: Instructions
+      value: Match all the stitches!
       objectReference: {fileID: 0}
     - target: {fileID: 7846543483269699471, guid: 039a6c04e687d5f48806fbf9bb26eb24, type: 3}
       propertyPath: m_AnchorMax.x

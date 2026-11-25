@@ -993,10 +993,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BarCutGame
   MiniGameTime: 15
+  Instructions: Time the bar!
   MiniGameCompleteIndicator: {fileID: 5148677412565957939}
+  MiniGameInstructions: {fileID: 379283522078547865}
   Timer: {fileID: 3934930397935686874}
   pointerSpeed: 5
   tolerance: 1
+  _numOfHits: 3
   Bar: {fileID: 2505659239715933880}
   Pointer: {fileID: 607071374946640953}
   Objective: {fileID: 6372833444229103873}

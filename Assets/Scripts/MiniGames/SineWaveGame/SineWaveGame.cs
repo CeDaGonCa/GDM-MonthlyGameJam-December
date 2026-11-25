@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SineWaveGame : MinigameTypeController
@@ -5,6 +6,7 @@ public class SineWaveGame : MinigameTypeController
     [SerializeField] float tolerance = 0.02f;
     [SerializeField] float completionTime = 5f;
     [SerializeField] float changeAmount = 0.05f;
+    [SerializeField] float minDistance = 0.4f;
     [SerializeField] SineWave ReferenceWave;
     [SerializeField] SineWave PlayerWave;
 
@@ -13,8 +15,7 @@ public class SineWaveGame : MinigameTypeController
     void Start()
     {
         PlayerWave.OnSineWaveChanged += OnSineWaveChanged;
-        PlayerWave.SetUpWave(changeAmount);
-        ReferenceWave.SetUpWave(changeAmount);
+        
     }
     
     void OnSineWaveChanged()
@@ -36,7 +37,14 @@ public class SineWaveGame : MinigameTypeController
         GameWon = false;
         Debug.Log("Reset the player wave");
         Debug.Log("Set the reference wave to some random");
-        ReferenceWave.RandomizeWave(); // Should I add something to check that the game is not instantly won? the odds are super small tho :/
-        PlayerWave.RandomizeWave();
+        PlayerWave.SetUpWave(changeAmount);
+        ReferenceWave.SetUpWave(changeAmount);
+        float playerFreq = PlayerWave.Frequency;
+        float referenceFreq = ReferenceWave.Frequency;
+        while (Math.Abs(playerFreq - referenceFreq) <= minDistance)
+        {
+            playerFreq = PlayerWave.RandomizeWave();
+            referenceFreq = ReferenceWave.RandomizeWave();
+        }
     }
 }

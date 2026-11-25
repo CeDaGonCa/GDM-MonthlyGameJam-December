@@ -1163,11 +1163,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SineWaveGame
   MiniGameTime: 15
+  Instructions: Match all the stitches
   MiniGameCompleteIndicator: {fileID: 4211256008903984149}
+  MiniGameInstructions: {fileID: 2570486351107463630}
   Timer: {fileID: 1267589308235693783}
   tolerance: 0.19
   completionTime: 5
   changeAmount: 0.2
+  minDistance: 0.4
   ReferenceWave: {fileID: 393523054887911553}
   PlayerWave: {fileID: 1614809348319690606}
 --- !u!1 &6175734029832426813
