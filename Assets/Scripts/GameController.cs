@@ -4,6 +4,12 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
+public class MiniGameInstance
+{
+    public bool Completed;
+    public TaskWidget Task;
+}
+
 // Overarching "GameController/Manager", controls current game state (controller) and player's status
 public class GameController : MonoBehaviour
 {
@@ -13,12 +19,15 @@ public class GameController : MonoBehaviour
     
     [Header("Triggers")]
     [SerializeField] Transform miniGameTriggers;
+    private Dictionary<MiniGameTrigger, MiniGameInstance> MinigameCompletion = new();
 
     [Header("UI References")] // dont put UI refs in managers usually, but its a gamejam so wtv
+    public CanvasGroup HighlightsHUD;
     public TextMeshProUGUI TimerText;
+    public TaskListController taskListController;
     
     [Header("Design Values")]
-    public float TimeForLevel = 180; //TODO - maybe trace this from somewhere to change per level
+    public float TimeForLevel = 180;
 
     // State
     public float TimeRemaining;
@@ -30,6 +39,15 @@ public class GameController : MonoBehaviour
     {
         if (Instance != null) Debug.Log("There is already a GameController in play");
         Instance = this;
+
+        foreach (MiniGameTrigger Trigger in Resources.FindObjectsOfTypeAll<MiniGameTrigger>())
+        {
+            Trigger.OnGameStart += GameStart;
+            TaskWidget task = taskListController.CreateTask(Trigger.MinigameData);
+            MinigameCompletion.Add(Trigger, new MiniGameInstance(){Completed = false, Task = task});
+        }
+        
+        miniGameController.OnMiniGameSuccessfullyCompleted += OnCompletedMiniGame;
     }
     
     void Start()
@@ -38,13 +56,8 @@ public class GameController : MonoBehaviour
         cameraController.HandleStart();
         
         TimeRemaining = TimeForLevel;
-        for (int i = 0; i < miniGameTriggers.childCount; i++) // could prolly use Resources.FindAllByType or whatever that func is 
-        {
-            var trigger = miniGameTriggers.GetChild(i).GetComponent<MiniGameTrigger>();
-            if (trigger == null) Debug.Log("NON TRIGGER IN TRIGGER POOL");
-            trigger.OnGameStart += GameStart;
-        }
     }
+    
     void Update()
     {
         //@Cesar Consider using state machines instead
@@ -62,6 +75,15 @@ public class GameController : MonoBehaviour
         TimeRemaining -= Time.deltaTime;
         TimerText.text = FormatTime(TimeRemaining);
     }
+
+    private void OnCompletedMiniGame(MiniGameTrigger trigger)
+    {
+        if (trigger == null || !MinigameCompletion.ContainsKey(trigger))
+            return;
+
+        MinigameCompletion[trigger].Completed = true;
+        MinigameCompletion[trigger].Task.MarkComplete(true);
+    }
     
     public void ChangeState(GameState newState)
     {
@@ -78,6 +100,7 @@ public class GameController : MonoBehaviour
             else if (newState == GameState.FREECAMERA)
                 Cursor.lockState = CursorLockMode.Locked;
         
+            HighlightsHUD.DOFade(newState == GameState.MINIGAME ? 0 : 1, 0.2f);
             State = newState;
         }
         
@@ -101,23 +124,10 @@ public class GameController : MonoBehaviour
         }
     }
     
-    private void GameStart(MinigameTaskData minigameData)
+    private void GameStart(MiniGameTrigger trigger)
     {
         ChangeState(GameState.MINIGAME);
-        miniGameController.StartGame(minigameData);
-    }
-    
-    public List<MinigameTaskData> GetAllTasks()
-    {
-        MiniGameTrigger[] Triggers = Resources.FindObjectsOfTypeAll<MiniGameTrigger>();
-
-        List<MinigameTaskData> Tasks = new();
-        foreach (MiniGameTrigger Trigger in Triggers)
-        {
-            Tasks.Add(Trigger.MinigameData);
-        }
-    
-        return Tasks;
+        miniGameController.StartGame(trigger);
     }
 
     string FormatTime(float seconds)

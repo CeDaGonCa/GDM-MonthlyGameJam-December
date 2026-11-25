@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb337068902307e438319781d1ebea37, type: 3}
   m_Name: TestBarCut
   m_EditorClassIdentifier: Assembly-CSharp::BarCutMinigameData
+  TaskTitle: Stitch the Arm
   BackgroundSprite: {fileID: 0}

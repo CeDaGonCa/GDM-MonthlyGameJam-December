@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3269602fa5b225e4c94b3bf82562f6fa, type: 3}
   m_Name: TestSineWave
   m_EditorClassIdentifier: Assembly-CSharp::SineWaveMinigameData
+  TaskTitle: Regulate heartbeat
   BackgroundSprite: {fileID: 0}

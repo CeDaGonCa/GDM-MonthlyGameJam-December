@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,7 +19,11 @@ public class MiniGameController : MonoBehaviour
     [Header("State")]
     public static MiniGameController Instance { get; private set; } // Singleton
     private Camera mainCamera;
+    
     private MinigameTypeController currentMinigame;
+    private MiniGameTrigger currentTrigger;
+    
+    public Action<MiniGameTrigger> OnMiniGameSuccessfullyCompleted;
 
     private void Awake()
     {
@@ -32,17 +37,18 @@ public class MiniGameController : MonoBehaviour
         BarCutMinigame.OnMinigameComplete += CompleteMinigame;
     }
     
-    public void StartGame(MinigameTaskData minigameData)
+    public void StartGame(MiniGameTrigger trigger)
     {
         UIController.instance.ToggleMiniGame(true);
+        currentTrigger = trigger;
         
-        if (minigameData.GetType() == typeof(StitchMinigameData))
+        if (trigger.MinigameData.GetType() == typeof(StitchMinigameData))
         {
             currentMinigame = StitchMinigame;
             StitchMinigame.transform.DOLocalMoveX(0, 0.5f);
             StitchMinigame.StartGame();
         }
-        else if (minigameData.GetType() == typeof(SineWaveMinigameData))
+        else if (trigger.MinigameData.GetType() == typeof(SineWaveMinigameData))
         {
             currentMinigame = SineWaveGame;
             currentMinigame.gameObject.SetActive(true);
@@ -50,7 +56,7 @@ public class MiniGameController : MonoBehaviour
             SineWaveGame.transform.DOLocalMoveX(0.56f, 0.5f);
             currentMinigame.StartGame();
         }
-        else if (minigameData.GetType() == typeof(BarCutMinigameData))
+        else if (trigger.MinigameData.GetType() == typeof(BarCutMinigameData))
         {
             currentMinigame = BarCutMinigame;
             currentMinigame.gameObject.SetActive(true);
@@ -69,6 +75,11 @@ public class MiniGameController : MonoBehaviour
         if (!success)
         {
             GameController.Instance.LoseTime();
+        }
+        else
+        {
+            currentTrigger.CompleteTrigger();
+            OnMiniGameSuccessfullyCompleted?.Invoke(currentTrigger);
         }
     }
 

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf500c5b26747bd94ad0651942d1647, type: 3}
   m_Name: TestStitchMiniGame
   m_EditorClassIdentifier: Assembly-CSharp::StitchMinigameData
+  TaskTitle: Cut the corrupted vein
   BackgroundSprite: {fileID: 0}
