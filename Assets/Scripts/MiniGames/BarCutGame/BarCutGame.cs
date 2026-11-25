@@ -44,7 +44,7 @@ public class BarCutGame : MinigameTypeController
         {
             if ((Pointer.transform.localPosition - Objective.transform.localPosition).magnitude <= tolerance)
             {
-                GameWon();
+                GameWon(); // Maybe make it so you have to do it multiple times and the position of the target is random
             }
             else
             {

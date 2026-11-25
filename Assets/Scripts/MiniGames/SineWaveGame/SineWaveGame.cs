@@ -17,7 +17,7 @@ public class SineWaveGame : MinigameTypeController
     void OnSineWaveChanged()
     {
         if (GameWon) return;
-        Debug.Log($"{ReferenceWave.Frequency} {PlayerWave.Frequency}");
+        Debug.Log($"References freq: {ReferenceWave.Frequency} \n Player's Freq: {PlayerWave.Frequency}");
         if (Mathf.Abs(ReferenceWave.Frequency - PlayerWave.Frequency) <= tolerance)
         {
             GameWon = true;
@@ -33,5 +33,7 @@ public class SineWaveGame : MinigameTypeController
         GameWon = false;
         Debug.Log("Reset the player wave");
         Debug.Log("Set the reference wave to some random");
+        ReferenceWave.RandomizeWave(); // Should I add something to check that the game is not instantly won? the odds are super small tho :/
+        PlayerWave.RandomizeWave();
     }
 }

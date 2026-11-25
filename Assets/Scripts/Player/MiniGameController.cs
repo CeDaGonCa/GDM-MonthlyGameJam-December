@@ -16,7 +16,7 @@ public class MiniGameController : MonoBehaviour
     public MinigameTypeController BarCutMinigame;
 
     [Header("State")]
-    public static MiniGameController Instance { get; private set; }
+    public static MiniGameController Instance { get; private set; } // Singleton
     private Camera mainCamera;
     private MinigameTypeController currentMinigame;
 

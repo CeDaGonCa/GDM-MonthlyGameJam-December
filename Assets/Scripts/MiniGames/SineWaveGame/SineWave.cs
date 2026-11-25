@@ -24,9 +24,14 @@ public class SineWave : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.alignment = LineAlignment.View;
-        lineRenderer.useWorldSpace = false;
-        frequency = Random.Range(1, (int)(frequencyLimit / changeAmount)) * changeAmount;
+        lineRenderer.useWorldSpace = false; 
+        lineRenderer.widthCurve = AnimationCurve.Constant(0f, 1f, lineWidth * transform.lossyScale.y * 4f);
+        RandomizeWave();
         //SineLimits = new Vector2(0,3);
+    }
+    public void RandomizeWave()
+    {
+        frequency = Random.Range(1, (int)(frequencyLimit / changeAmount)) * changeAmount;
     }
 
 
@@ -37,7 +42,7 @@ public class SineWave : MonoBehaviour
         //scale = transform.lossyScale;
         Vector3 offset = new Vector3(0, transform.position.y, transform.position.z - (scale.z / 2));
         //Vector3 offset = transform.position - new Vector3(scale.x/2,0,scale.z/2);
-        lineRenderer.widthCurve = AnimationCurve.Constant(0f, 1f, lineWidth);
+        
         float xStart = transform.position.x - scale.x / 2;
         float xFinish = transform.position.x + scale.x / 2;
         //float xStart = transform.position.x - scale.x / 2 + margins;

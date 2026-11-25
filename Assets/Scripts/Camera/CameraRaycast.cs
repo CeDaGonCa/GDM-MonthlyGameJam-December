@@ -15,6 +15,13 @@ public class CameraRaycast : MonoBehaviour
         cam = GetComponent<Camera>();
         highlight.gameObject.SetActive(false);
     }
+    void Update()
+    {
+        if(GameController.Instance.State == GameState.MINIGAME)
+        {
+            highlight.gameObject.SetActive(false); // Is just because it sometimes overlaps with the minigame and it doesn't look nice
+        }
+    }
 
     public void HandleUpdate()
     {
