@@ -12,31 +12,38 @@ public class SineWave : MonoBehaviour
     [SerializeField] float frequencyLimit = 2f;
     [SerializeField] float amplitudeLimit = 1f;
     [SerializeField] float lineWidth = 0.05f;
-    [SerializeField] float changeAmount = 0.05f;
+    
     [SerializeField] float margins = 2f;
-
+    public float ChangeAmount {get; set;} = 0f;
     [SerializeField] Transform device;
 
     public Action OnSineWaveChanged;
     
     private LineRenderer lineRenderer;
+    bool SetUp = false;
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.alignment = LineAlignment.View;
         lineRenderer.useWorldSpace = false; 
         lineRenderer.widthCurve = AnimationCurve.Constant(0f, 1f, lineWidth * transform.lossyScale.y * 4f);
-        RandomizeWave();
         //SineLimits = new Vector2(0,3);
+    }
+    public void SetUpWave(float changeAmt)
+    {
+        ChangeAmount = changeAmt;
+        RandomizeWave();
+        SetUp = true;
     }
     public void RandomizeWave()
     {
-        frequency = Random.Range(1, (int)(frequencyLimit / changeAmount)) * changeAmount;
+        frequency = Random.Range(1, (int)(frequencyLimit / ChangeAmount)) * ChangeAmount;
     }
 
 
     void Update()
     {
+        if(!SetUp) return;
         Vector3 scale = new Vector3(transform.localScale.x * device.localScale.x, transform.localScale.y * device.localScale.y,
                 transform.localScale.z);
         //scale = transform.lossyScale;
@@ -67,11 +74,11 @@ public class SineWave : MonoBehaviour
     {
         if (changeFreq)
         {
-            frequency = Mathf.Clamp(frequency + (Adds ? 1 : -1) * changeAmount, changeAmount, frequencyLimit);
+            frequency = Mathf.Clamp(frequency + (Adds ? 1 : -1) * ChangeAmount, ChangeAmount, frequencyLimit);
         }
         else
         {
-            amplitude = Mathf.Clamp(amplitude + (Adds ? 1 : -1) * changeAmount, changeAmount, frequencyLimit);
+            amplitude = Mathf.Clamp(amplitude + (Adds ? 1 : -1) * ChangeAmount, ChangeAmount, frequencyLimit);
         }
         
         OnSineWaveChanged?.Invoke();

@@ -4,6 +4,7 @@ public class SineWaveGame : MinigameTypeController
 {
     [SerializeField] float tolerance = 0.02f;
     [SerializeField] float completionTime = 5f;
+    [SerializeField] float changeAmount = 0.05f;
     [SerializeField] SineWave ReferenceWave;
     [SerializeField] SineWave PlayerWave;
 
@@ -12,6 +13,8 @@ public class SineWaveGame : MinigameTypeController
     void Start()
     {
         PlayerWave.OnSineWaveChanged += OnSineWaveChanged;
+        PlayerWave.SetUpWave(changeAmount);
+        ReferenceWave.SetUpWave(changeAmount);
     }
     
     void OnSineWaveChanged()

@@ -175,7 +175,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 8
+  m_SortingOrder: 9
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0, g: 0.20977795, b: 1, a: 1}
@@ -278,11 +278,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6350360955614294800}
   - {fileID: 2254515597453415317}
   - {fileID: 8826359256573624724}
   - {fileID: 142509308825078676}
   - {fileID: 3220220202520432448}
-  - {fileID: 6350360955614294800}
   m_Father: {fileID: 1468566087992124863}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2702077205076264856
@@ -366,7 +366,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 8
+  m_SortingOrder: 9
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0, g: 0.20977795, b: 1, a: 1}
@@ -810,7 +810,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 8
+  m_SortingOrder: 9
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0, g: 0.20977795, b: 1, a: 1}
@@ -1040,7 +1040,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 8
+  m_SortingOrder: 9
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0, g: 0.20977795, b: 1, a: 1}
@@ -1165,8 +1165,9 @@ MonoBehaviour:
   MiniGameTime: 15
   MiniGameCompleteIndicator: {fileID: 4211256008903984149}
   Timer: {fileID: 1267589308235693783}
-  tolerance: 0.049
+  tolerance: 0.19
   completionTime: 5
+  changeAmount: 0.2
   ReferenceWave: {fileID: 393523054887911553}
   PlayerWave: {fileID: 1614809348319690606}
 --- !u!1 &6175734029832426813
@@ -1330,7 +1331,6 @@ MonoBehaviour:
   frequencyLimit: 8
   amplitudeLimit: 1
   lineWidth: 0.05
-  changeAmount: 0.1
   margins: 1
   device: {fileID: 7442557151634435495}
 --- !u!1 &7007507739424208988
@@ -2028,6 +2028,5 @@ MonoBehaviour:
   frequencyLimit: 2
   amplitudeLimit: 1
   lineWidth: 0.05
-  changeAmount: 0.1
   margins: 1
   device: {fileID: 7442557151634435495}

@@ -53,7 +53,7 @@ public class MiniGameController : MonoBehaviour
             currentMinigame = SineWaveGame;
             currentMinigame.gameObject.SetActive(true);
             UIController.instance.ToggleMiniGame(true);
-            SineWaveGame.transform.DOLocalMoveX(0.56f, 0.5f);
+            SineWaveGame.transform.DOLocalMoveX(0, 0.5f);
             currentMinigame.StartGame();
         }
         else if (trigger.MinigameData.GetType() == typeof(BarCutMinigameData))
