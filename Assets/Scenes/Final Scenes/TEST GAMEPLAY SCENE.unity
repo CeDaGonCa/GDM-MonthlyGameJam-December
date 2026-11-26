@@ -387,6 +387,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   interactionDistance: 10
   highlight: {fileID: 264150348}
+--- !u!4 &367935964 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1468566087992124863, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
+  m_PrefabInstance: {fileID: 1533507568}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &367935965 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8175429404623629824, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
+  m_PrefabInstance: {fileID: 1533507568}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b60da95f5c66c3048addae9cb987b434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SineWaveGame
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,9 +562,7 @@ MonoBehaviour:
   cameraController: {fileID: 330585548}
   miniGameController: {fileID: 1089640627}
   miniGameTriggers: {fileID: 1562346120}
-  HighlightsHUD: {fileID: 840686520}
-  TimerText: {fileID: 1201398249}
-  taskListController: {fileID: 2105429662}
+  HighlightsHUD: {fileID: 840686525}
   TimeForLevel: 180
   TimeRemaining: 0
 --- !u!4 &476284292
@@ -844,7 +858,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0e535b2b2fc000468b97ce0e2c7645d, type: 3}
---- !u!225 &840686520 stripped
+--- !u!225 &840686525 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 4562580420977791712, guid: d0e535b2b2fc000468b97ce0e2c7645d, type: 3}
   m_PrefabInstance: {fileID: 840686519}
@@ -880,7 +894,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2098737489}
-  - {fileID: 1533507569}
+  - {fileID: 367935964}
   - {fileID: 811341350}
   m_Father: {fileID: 330585546}
   m_LocalEulerAnglesHint: {x: 0, y: -9.48, z: 0}
@@ -897,7 +911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameController
   StitchMinigame: {fileID: 2098737490}
-  SineWaveGame: {fileID: 1913118784}
+  SineWaveGame: {fileID: 367935965}
   BarCutMinigame: {fileID: 2018653633}
 --- !u!1 &1182172030
 GameObject:
@@ -1103,17 +1117,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 732824580}
   m_LocalEulerAnglesHint: {x: 0, y: 77.9, z: 0}
---- !u!114 &1201398249 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1022902336059833790, guid: 6881680fa5b4d0b45a29e4fb63fbda23, type: 3}
-  m_PrefabInstance: {fileID: 8488653569178578080}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1317624338
 GameObject:
   m_ObjectHideFlags: 0
@@ -1587,11 +1590,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
---- !u!4 &1533507569 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1468566087992124863, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
-  m_PrefabInstance: {fileID: 1533507568}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1562346119
 GameObject:
   m_ObjectHideFlags: 0
@@ -1828,17 +1826,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1847866354}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1913118784 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8175429404623629824, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
-  m_PrefabInstance: {fileID: 1533507568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b60da95f5c66c3048addae9cb987b434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SineWaveGame
 --- !u!1 &1914414288
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,17 +2022,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b005e60dd56e74da89334b7a57c6d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StitchController
---- !u!114 &2105429662 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6922086796416008005, guid: 6881680fa5b4d0b45a29e4fb63fbda23, type: 3}
-  m_PrefabInstance: {fileID: 8488653569178578080}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 557e131fcadb4a1e93ef197b07598ad6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TaskListController
 --- !u!1001 &8488653569178578080
 PrefabInstance:
   m_ObjectHideFlags: 0
