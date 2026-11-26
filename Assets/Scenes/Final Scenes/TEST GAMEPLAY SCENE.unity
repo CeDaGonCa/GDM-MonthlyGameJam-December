@@ -387,22 +387,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   interactionDistance: 10
   highlight: {fileID: 264150348}
---- !u!4 &367935964 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1468566087992124863, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
-  m_PrefabInstance: {fileID: 1533507568}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &367935965 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8175429404623629824, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
-  m_PrefabInstance: {fileID: 1533507568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b60da95f5c66c3048addae9cb987b434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SineWaveGame
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +546,7 @@ MonoBehaviour:
   cameraController: {fileID: 330585548}
   miniGameController: {fileID: 1089640627}
   miniGameTriggers: {fileID: 1562346120}
-  HighlightsHUD: {fileID: 840686525}
+  HighlightsHUD: {fileID: 0}
   TimeForLevel: 180
   TimeRemaining: 0
 --- !u!4 &476284292
@@ -858,11 +842,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0e535b2b2fc000468b97ce0e2c7645d, type: 3}
---- !u!225 &840686525 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 4562580420977791712, guid: d0e535b2b2fc000468b97ce0e2c7645d, type: 3}
-  m_PrefabInstance: {fileID: 840686519}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1089640625
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,7 +873,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2098737489}
-  - {fileID: 367935964}
+  - {fileID: 1533507569}
   - {fileID: 811341350}
   m_Father: {fileID: 330585546}
   m_LocalEulerAnglesHint: {x: 0, y: -9.48, z: 0}
@@ -911,7 +890,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameController
   StitchMinigame: {fileID: 2098737490}
-  SineWaveGame: {fileID: 367935965}
+  SineWaveGame: {fileID: 0}
   BarCutMinigame: {fileID: 2018653633}
 --- !u!1 &1182172030
 GameObject:
@@ -1590,6 +1569,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
+--- !u!4 &1533507569 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1468566087992124863, guid: d486e1daef0a22e43844383e41e36dcd, type: 3}
+  m_PrefabInstance: {fileID: 1533507568}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1562346119
 GameObject:
   m_ObjectHideFlags: 0
