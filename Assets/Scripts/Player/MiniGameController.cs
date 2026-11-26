@@ -11,6 +11,9 @@ public enum MiniGameType
 // Controller when the game is in MiniGameMode, and manages which MiniGame is being displayed
 public class MiniGameController : MonoBehaviour
 {
+    public float CameraZoomAmount;
+    private Vector3 originalCameraPos;
+    
     [Header("MiniGames")]
     public MinigameTypeController StitchMinigame;
     public MinigameTypeController SineWaveGame;
@@ -32,8 +35,13 @@ public class MiniGameController : MonoBehaviour
         Instance = this;
         
         // subscribe once at the start for each
+        StitchMinigame.OnMinigameCompleteStarted += CompleteMiniGameStarted;
         StitchMinigame.OnMinigameComplete += CompleteMinigame;
+        
+        SineWaveGame.OnMinigameCompleteStarted += CompleteMiniGameStarted;
         SineWaveGame.OnMinigameComplete += CompleteMinigame;
+        
+        BarCutMinigame.OnMinigameCompleteStarted += CompleteMiniGameStarted;
         BarCutMinigame.OnMinigameComplete += CompleteMinigame;
     }
     
@@ -41,11 +49,16 @@ public class MiniGameController : MonoBehaviour
     {
         UIController.instance.ToggleMiniGame(true);
         currentTrigger = trigger;
+
+        Transform cam = Camera.main.transform;
+        originalCameraPos = cam.position;
+        Vector3 target = cam.transform.position + cam.transform.forward * CameraZoomAmount;
+        cam.transform.DOMove(target, 0.3f).SetEase(Ease.InOutSine);
         
         if (trigger.MinigameData.GetType() == typeof(StitchMinigameData))
         {
             currentMinigame = StitchMinigame;
-            StitchMinigame.transform.DOLocalMoveX(0, 0.5f);
+            StitchMinigame.transform.DOLocalMoveX(StitchMinigame.XPos, 0.5f);
             StitchMinigame.StartGame();
         }
         else if (trigger.MinigameData.GetType() == typeof(SineWaveMinigameData))
@@ -53,7 +66,7 @@ public class MiniGameController : MonoBehaviour
             currentMinigame = SineWaveGame;
             currentMinigame.gameObject.SetActive(true);
             UIController.instance.ToggleMiniGame(true);
-            SineWaveGame.transform.DOLocalMoveX(0, 0.5f);
+            SineWaveGame.transform.DOLocalMoveX(SineWaveGame.XPos, 0.5f);
             currentMinigame.StartGame();
         }
         else if (trigger.MinigameData.GetType() == typeof(BarCutMinigameData))
@@ -61,14 +74,20 @@ public class MiniGameController : MonoBehaviour
             currentMinigame = BarCutMinigame;
             currentMinigame.gameObject.SetActive(true);
             UIController.instance.ToggleMiniGame(true);
-            BarCutMinigame.transform.DOLocalMoveX(0, 0.5f);
+            BarCutMinigame.transform.DOLocalMoveX(BarCutMinigame.XPos, 0.5f);
             currentMinigame.StartGame();
         }
     }
 
+    private void CompleteMiniGameStarted()
+    {
+        currentTrigger.CompleteTrigger();
+    }
+    
     private void CompleteMinigame(MiniGameType type, bool success){
         currentMinigame.transform.DOLocalMoveX(-1.5f, 0.5f);
         UIController.instance.ToggleMiniGame(false);
+        Camera.main.transform.DOMove(originalCameraPos, 0.3f).SetEase(Ease.InOutSine);
         GameController.Instance.ChangeState(GameState.FREECAMERA);
         
         // failed minigame, lose some health
@@ -78,7 +97,6 @@ public class MiniGameController : MonoBehaviour
         }
         else
         {
-            currentTrigger.CompleteTrigger();
             OnMiniGameSuccessfullyCompleted?.Invoke(currentTrigger);
         }
     }

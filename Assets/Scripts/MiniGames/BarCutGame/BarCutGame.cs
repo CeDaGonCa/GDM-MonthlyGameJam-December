@@ -23,7 +23,6 @@ public class BarCutGame : MinigameTypeController
         barDimensions = Bar.transform.localScale.y / 2;
     }
     private int direction = 1;
-    bool gameWon = false;
 
     public override void StartGame()
     {
@@ -41,9 +40,10 @@ public class BarCutGame : MinigameTypeController
         Objective.transform.localPosition = tmp;
     }
 
-    void Update()
+    protected override void Update()
     {
-        if (gameWon) return;
+        base.Update();
+        
         Pointer.transform.localPosition += direction * pointerSpeed * Time.deltaTime * Vector3.up;
         if (Pointer.transform.localPosition.y > barDimensions)
         {
@@ -88,7 +88,6 @@ public class BarCutGame : MinigameTypeController
     void GameWon()
     {
         Debug.Log("You won");
-        gameWon = true;
         FinishMiniGame();
     }
 }

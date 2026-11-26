@@ -12,8 +12,11 @@ public abstract class MinigameTypeController : MonoBehaviour
     protected MiniGameType minigameType;
     public float MiniGameTime = 15f;
     public String Instructions;
-    
+    public float XPos;
+
+    public Action OnMinigameCompleteStarted;
     public Action<MiniGameType, bool> OnMinigameComplete;
+    
     [SerializeField] protected CanvasGroup MiniGameCompleteIndicator;
     [SerializeField] protected TMP_Text MiniGameInstructions;
     public Slider Timer;
@@ -40,20 +43,26 @@ public abstract class MinigameTypeController : MonoBehaviour
     // ignore this its ugly as fuck but im lazy
     IEnumerator FinishMiniGameProcess()
     {
+        OnMinigameCompleteStarted?.Invoke();
+        
         yield return null;
         MiniGameCompleteIndicator.DOFade(1f, 0.1f);
         yield return new WaitForSeconds(0.1f);
-        MiniGameCompleteIndicator.DOFade(0.4f, 0.1f);
+        MiniGameCompleteIndicator.DOFade(0.6f, 0.1f);
         yield return new WaitForSeconds(0.1f);
         MiniGameCompleteIndicator.DOFade(1f, 0.1f);
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.1f);
+        MiniGameCompleteIndicator.DOFade(0.8f, 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        MiniGameCompleteIndicator.DOFade(1f, 0.1f);
+        yield return new WaitForSeconds(0.6f);
         
         OnMinigameComplete?.Invoke(minigameType, true);
     }
     
     // All minigames will have some sort of timer, however others might also have a second fail condition (failing the slider bar too many times, etc.)
     // All fail conditions simply fire OnMiniGameComplete(false)
-    void Update()
+    protected virtual void Update()
     {
         if (!bIsBeingPlayed) return;
         

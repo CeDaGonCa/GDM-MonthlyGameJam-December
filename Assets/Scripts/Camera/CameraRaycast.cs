@@ -9,6 +9,7 @@ public class CameraRaycast : MonoBehaviour
 
     private Camera cam;
     private GameObject currentTarget;
+    [SerializeField] private MiniGameTrigger hoveredTrigger;
 
     void Start()
     {
@@ -26,35 +27,39 @@ public class CameraRaycast : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
-            // hitting an interactable body part here
-            if (hit.collider.CompareTag("Interactable"))
+            MiniGameTrigger miniGameTrigger = hit.collider.GetComponent<MiniGameTrigger>();
+            
+            // if not hitting an interactable body part, set return early and set trigger to nothing
+            if (!hit.collider.CompareTag("Interactable") || miniGameTrigger == null)
             {
-                // return early, no point doing anything else if Trigger is null
-                MiniGameTrigger miniGameTrigger = hit.collider.GetComponent<MiniGameTrigger>();
-                if (miniGameTrigger == null)
+                if (hoveredTrigger != null)
                 {
-                    Debug.Log("Something is wrong with triggers");
-                    return;
+                    hoveredTrigger.OnUnhover();
+                    hoveredTrigger = null;
+                    currentTarget = null;
+                    highlight.gameObject.SetActive(false);
                 }
-                
-                // set highlight position, and enable it, + change the enable/disable if its already done
-                currentTarget = hit.collider.gameObject;
-                Vector3 screenPos = cam.WorldToScreenPoint(currentTarget.transform.position);
-                highlight.position = screenPos;
-                
-                highlight.gameObject.SetActive(true);
-                highlight.GetChild(0).gameObject.SetActive(!miniGameTrigger.IsActive);
-
-                if (Mouse.current.leftButton.wasPressedThisFrame && miniGameTrigger.IsActive)
-                {
-                    miniGameTrigger.StartGame();
-                }
-
                 return;
             }
-        }
+            
+            // set highlight position, and enable it, + change the enable/disable if its already done
+            if (hoveredTrigger == null || hoveredTrigger != miniGameTrigger)
+            {
+                hoveredTrigger = miniGameTrigger;
+                hoveredTrigger.OnHover();
+            }
+            
+            currentTarget = hit.collider.gameObject;
+            Vector3 screenPos = cam.WorldToScreenPoint(currentTarget.transform.position);
+            highlight.position = screenPos;
+            
+            highlight.gameObject.SetActive(true);
+            highlight.GetChild(0).gameObject.SetActive(!miniGameTrigger.IsActive);
 
-        currentTarget = null;
-        highlight.gameObject.SetActive(false);
+            if (Mouse.current.leftButton.wasPressedThisFrame && miniGameTrigger.IsActive)
+            {
+                miniGameTrigger.StartGame();
+            }
+        }
     }
 }
