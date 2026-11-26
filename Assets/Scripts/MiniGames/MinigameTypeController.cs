@@ -1,23 +1,35 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 // Generic controller for minigames
-public class MinigameTypeController : MonoBehaviour
+public abstract class MinigameTypeController : MonoBehaviour
 {
     [Header("Generic Minigame Values")]
     protected MiniGameType minigameType;
-    public float MiniGameTime;
+    public float MiniGameTime = 15f;
+    public String Instructions;
     
     public Action<MiniGameType, bool> OnMinigameComplete;
     [SerializeField] protected CanvasGroup MiniGameCompleteIndicator;
+    [SerializeField] protected TMP_Text MiniGameInstructions;
     public Slider Timer;
     
     // Game State
     protected float TimeRemaining;
     protected bool bIsBeingPlayed = false;
+
+    public virtual void StartGame()
+    {
+        MiniGameCompleteIndicator.alpha = 0;
+        bIsBeingPlayed = true;
+        TimeRemaining = MiniGameTime;
+        Timer.value = 1;
+        MiniGameInstructions.text = Instructions;
+    }
     
     protected void FinishMiniGame()
     {

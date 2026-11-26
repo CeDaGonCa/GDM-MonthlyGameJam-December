@@ -29,36 +29,27 @@ public class CameraRaycast : MonoBehaviour
             // hitting an interactable body part here
             if (hit.collider.CompareTag("Interactable"))
             {
+                // return early, no point doing anything else if Trigger is null
+                MiniGameTrigger miniGameTrigger = hit.collider.GetComponent<MiniGameTrigger>();
+                if (miniGameTrigger == null)
+                {
+                    Debug.Log("Something is wrong with triggers");
+                    return;
+                }
+                
+                // set highlight position, and enable it, + change the enable/disable if its already done
                 currentTarget = hit.collider.gameObject;
-                Vector3 screenPos = cam.WorldToScreenPoint(
-                    currentTarget.transform.position
-                );
-
+                Vector3 screenPos = cam.WorldToScreenPoint(currentTarget.transform.position);
                 highlight.position = screenPos;
+                
+                highlight.gameObject.SetActive(true);
+                highlight.GetChild(0).gameObject.SetActive(!miniGameTrigger.IsActive);
 
-                if (Mouse.current.leftButton.wasPressedThisFrame)
+                if (Mouse.current.leftButton.wasPressedThisFrame && miniGameTrigger.IsActive)
                 {
-                    MiniGameTrigger miniGameTrigger = hit.collider.GetComponent<MiniGameTrigger>();
-                    if (miniGameTrigger == null)
-                    {
-                        Debug.Log("Something is wrong with triggers");
-                    }
-                    else
-                    {
-                        miniGameTrigger.StartGame();
-                    }
+                    miniGameTrigger.StartGame();
                 }
-                // currently all its doing is setting the UI piece to be true, so probably add something here to do something when the raycast is detecting a thing
-                // i.e. "If i press a button in this state where i am hovering over smth interactable, start the minigame processs"
-                // alternatively u can move all this logic out of Update and just have a "OnHighlight" and "OnUnhighlight" event, but meh its prolly fine as is 
-                if (GameController.Instance.State == GameState.FREECAMERA)
-                {
-                    highlight.gameObject.SetActive(true);
-                }
-                else
-                {
-                    highlight.gameObject.SetActive(false);
-                }
+
                 return;
             }
         }

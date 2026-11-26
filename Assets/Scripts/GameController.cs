@@ -1,7 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+
+public class MiniGameInstance
+{
+    public bool Completed;
+    public TaskWidget Task;
+}
 
 // Overarching "GameController/Manager", controls current game state (controller) and player's status
 public class GameController : MonoBehaviour
@@ -12,15 +19,27 @@ public class GameController : MonoBehaviour
     
     [Header("Triggers")]
     [SerializeField] Transform miniGameTriggers;
-
-    [Header("UI References")] // dont put UI refs in managers usually, but its a gamejam so wtv
-    public TextMeshProUGUI TimerText;
+    private Dictionary<MiniGameTrigger, MiniGameInstance> MinigameCompletion = new();
+    
+    [Header("UI References")] // dont put UI refs in managers usually, but its a gamejam so wtv 
+    public CanvasGroup HighlightsHUD;
+    
+    // sourced from the UI controller
+    private TextMeshProUGUI TimerText;
+    private TaskListController taskListController;
+    private TextMeshProUGUI OpeningText;
+    private CanvasGroup ShownInGameHUD;
+    // side tangent but advice - to create maintainable and decoupled systems, the manager should NEVER *know* about the UI,
+    // instead, the UI should simply subscribe to Events that the managers/controllers fire, which is why this current setup is bad
+    // if it were for bigger projects, but ok for just a gamejam, at worst u can also just have a UI controller that manages the UI, 
+    // but ive fully lost the plot in this project
     
     [Header("Design Values")]
-    public float TimeForLevel = 180; //TODO - maybe trace this from somewhere to change per level
+    public float TimeForLevel = 180;
 
     // State
     public float TimeRemaining;
+    private bool IsGameStarted = false;
     
     public static GameController Instance { get; private set; }
     public GameState State { get; private set; }
@@ -31,29 +50,58 @@ public class GameController : MonoBehaviour
         Instance = this;
     }
     
-    void Start()
+    IEnumerator Start()
     {
+        // Setup and Initialization =========================================================
+        TimerText = UIController.instance.TimerText;
+        taskListController = UIController.instance.taskListController;
+        ShownInGameHUD = UIController.instance.ShownInGameHUD;
+        OpeningText = UIController.instance.OpeningText;
+        
+        foreach (MiniGameTrigger Trigger in Resources.FindObjectsOfTypeAll<MiniGameTrigger>())
+        {
+            Trigger.OnGameStart += GameStart;
+            TaskWidget task = taskListController.CreateTask(Trigger.MinigameData);
+            MinigameCompletion.Add(Trigger, new MiniGameInstance(){Completed = false, Task = task});
+        }
+        
+        miniGameController.OnMiniGameSuccessfullyCompleted += OnCompletedMiniGame;
+        
+        
+        // OPENING SEQUENCE =============================================================
+        string text = "DAY ONE"; //TODO - change this
+        foreach (char c in text)
+        {
+            OpeningText.text += c;
+            yield return new WaitForSeconds(0.2f);
+        }
+        yield return new WaitForSeconds(0.5f);
+        while (OpeningText.text.Length > 0)
+        {
+            OpeningText.text = OpeningText.text.Substring(0, OpeningText.text.Length - 1);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        ShownInGameHUD.DOFade(1, 0.5f);
+        TimeRemaining = TimeForLevel;
+        IsGameStarted = true;
+            
         State = GameState.FREECAMERA;
         cameraController.HandleStart();
-        
-        TimeRemaining = TimeForLevel;
-        for (int i = 0; i < miniGameTriggers.childCount; i++) // could prolly use Resources.FindAllByType or whatever that func is 
-        {
-            var trigger = miniGameTriggers.GetChild(i).GetComponent<MiniGameTrigger>();
-            if (trigger == null) Debug.Log("NON TRIGGER IN TRIGGER POOL");
-            trigger.OnGameStart += GameStart;
-        }
+        // =================================================================================
     }
+    
     void Update()
     {
-        //@Cesar Consider using state machines instead
+        if (!IsGameStarted)
+            return;
+        
         if (State == GameState.MINIGAME)
         {
             miniGameController.HandleUpdate();
         }
         else if (State == GameState.FREECAMERA)
         {
-            //@Cesar change this to be a controller instead for consistency
             cameraController.HandleUpdate();
         }
         
@@ -61,22 +109,57 @@ public class GameController : MonoBehaviour
         TimeRemaining -= Time.deltaTime;
         TimerText.text = FormatTime(TimeRemaining);
     }
+
+    private void OnCompletedMiniGame(MiniGameTrigger trigger)
+    {
+        if (trigger == null || !MinigameCompletion.ContainsKey(trigger))
+            return;
+
+        MinigameCompletion[trigger].Completed = true;
+        MinigameCompletion[trigger].Task.MarkComplete(true);
+        
+        // check if this was the last one
+        foreach (MiniGameInstance miniGameInstance in MinigameCompletion.Values)
+        {
+            if (!miniGameInstance.Completed)
+                return;
+        }
+        
+        // didn't return, meaning all are completed
+        StartCoroutine(FinishedAllMinigamesRoutine());
+    }
+
+    IEnumerator FinishedAllMinigamesRoutine()
+    {
+        UIController.instance.StopUI();
+        yield return new WaitForSeconds(0.6f);
+        
+        TransitionController.TransitionScene("BetweenLevelsScene");
+    }
     
     public void ChangeState(GameState newState)
     {
         // prolly would want to do an actual statemachine type of thing
         if (newState == State) 
             return; // returning if the same state
+
+        IEnumerator SwitchState()
+        {
+            yield return null;
+            
+            if (newState == GameState.MINIGAME)
+                Cursor.lockState = CursorLockMode.Confined;
+            else if (newState == GameState.FREECAMERA)
+                Cursor.lockState = CursorLockMode.Locked;
         
-        if (newState == GameState.MINIGAME)
-            Cursor.lockState = CursorLockMode.Confined;
-        else if (newState == GameState.FREECAMERA)
-            Cursor.lockState = CursorLockMode.Locked;
+            HighlightsHUD.DOFade(newState == GameState.MINIGAME ? 0 : 1, 0.2f);
+            State = newState;
+        }
         
-        State = newState;
+        StartCoroutine(SwitchState());
     }
 
-    // ignore this, this UI script should NOT be in manager, have more layers usually but for this idrc
+    // ignore this, this UI code should NOT be in manager, have more layers usually but for this idrc
     public void LoseTime(float duration = 1f, int flashes = 3)
     {
         TimeRemaining -= 10f;
@@ -93,23 +176,10 @@ public class GameController : MonoBehaviour
         }
     }
     
-    private void GameStart(MinigameTaskData minigameData)
+    private void GameStart(MiniGameTrigger trigger)
     {
         ChangeState(GameState.MINIGAME);
-        miniGameController.StartGame(minigameData);
-    }
-    
-    public List<MinigameTaskData> GetAllTasks()
-    {
-        MiniGameTrigger[] Triggers = Resources.FindObjectsOfTypeAll<MiniGameTrigger>();
-
-        List<MinigameTaskData> Tasks = new();
-        foreach (MiniGameTrigger Trigger in Triggers)
-        {
-            Tasks.Add(Trigger.MinigameData);
-        }
-    
-        return Tasks;
+        miniGameController.StartGame(trigger);
     }
 
     string FormatTime(float seconds)

@@ -5,11 +5,19 @@ public class MiniGameTrigger : MonoBehaviour
 {
     [SerializeField] MinigameTaskData _minigameData;
     public MinigameTaskData MinigameData => _minigameData;
-        
-    public Action<MinigameTaskData> OnGameStart;
+
+    [SerializeField] private bool _isActive = true;
+    public bool IsActive => _isActive;
+    
+    public Action<MiniGameTrigger> OnGameStart;
     
     public void StartGame()
     {
-        OnGameStart.Invoke(_minigameData);
+        OnGameStart.Invoke(this);
+    }
+
+    public void CompleteTrigger()
+    {
+        _isActive = false;
     }
 }

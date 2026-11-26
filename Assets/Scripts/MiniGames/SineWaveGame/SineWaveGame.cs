@@ -1,39 +1,50 @@
+using System;
 using UnityEngine;
 
-public class SineWaveGame : MonoBehaviour
+public class SineWaveGame : MinigameTypeController
 {
     [SerializeField] float tolerance = 0.02f;
     [SerializeField] float completionTime = 5f;
+    [SerializeField] float changeAmount = 0.05f;
+    [SerializeField] float minDistance = 0.4f;
     [SerializeField] SineWave ReferenceWave;
     [SerializeField] SineWave PlayerWave;
 
-    float EndCompletionTime = 0f;
+    bool GameWon = false;
+
     void Start()
     {
-        //gameObject.SetActive(false);
-        EndCompletionTime = Time.time + completionTime;
+        PlayerWave.OnSineWaveChanged += OnSineWaveChanged;
+        
     }
-    bool GameWon = false;
-    // Update is called once per frame
-    void Update()
+    
+    void OnSineWaveChanged()
     {
         if (GameWon) return;
+        Debug.Log($"References freq: {ReferenceWave.Frequency} \n Player's Freq: {PlayerWave.Frequency}");
         if (Mathf.Abs(ReferenceWave.Frequency - PlayerWave.Frequency) <= tolerance)
         {
-            if (EndCompletionTime <= Time.time)
-            {
-                Debug.Log("Won game");
-                GameWon = true;
-            }
-        }
-        else
-        {
-            EndCompletionTime = Time.time + completionTime;
+            GameWon = true;
+            FinishMiniGame();
         }
     }
 
-    public void StartGame()
+    public override void StartGame()
     {
+        base.StartGame();
+        
         // Probably something to set the Waves if needed
+        GameWon = false;
+        Debug.Log("Reset the player wave");
+        Debug.Log("Set the reference wave to some random");
+        PlayerWave.SetUpWave(changeAmount);
+        ReferenceWave.SetUpWave(changeAmount);
+        float playerFreq = PlayerWave.Frequency;
+        float referenceFreq = ReferenceWave.Frequency;
+        while (Math.Abs(playerFreq - referenceFreq) <= minDistance)
+        {
+            playerFreq = PlayerWave.RandomizeWave();
+            referenceFreq = ReferenceWave.RandomizeWave();
+        }
     }
 }
