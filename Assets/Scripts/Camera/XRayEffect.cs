@@ -1,16 +1,35 @@
+using DG.Tweening;
 using UnityEngine;
 
-public class XRayEffect : MonoBehaviour
+public class HeartXRayEffect : TriggerEffect
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public GameObject xray;
+    private GameObject heart;
+
+    public MeshRenderer InjuredHeart;
+    public MeshRenderer HealedHeart;
+
+    void Awake()
     {
-        
+        heart = InjuredHeart.gameObject;
+    }
+    
+    public override void OnHover()
+    {
+        xray.SetActive(true);
+        heart.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnComplete()
     {
-        
+        HealedHeart.gameObject.SetActive(true);
+        InjuredHeart.material.DOFade(0f, 1.5f);
+        heart =  HealedHeart.gameObject;
+    }
+    
+    public override void OnUnhover()
+    {
+        heart.SetActive(false);
+        xray.SetActive(false);
     }
 }

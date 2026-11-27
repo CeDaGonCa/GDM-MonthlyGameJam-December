@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -40,6 +41,7 @@ public class GameController : MonoBehaviour
     // State
     public float TimeRemaining;
     private bool IsGameStarted = false;
+    public Action GameStarted;
     
     public static GameController Instance { get; private set; }
     public GameState State { get; private set; }
@@ -57,6 +59,7 @@ public class GameController : MonoBehaviour
         taskListController = UIController.instance.taskListController;
         ShownInGameHUD = UIController.instance.ShownInGameHUD;
         OpeningText = UIController.instance.OpeningText;
+        HighlightsHUD.alpha = 0;
         
         foreach (MiniGameTrigger Trigger in Resources.FindObjectsOfTypeAll<MiniGameTrigger>())
         {
@@ -75,14 +78,17 @@ public class GameController : MonoBehaviour
             OpeningText.text += c;
             yield return new WaitForSeconds(0.2f);
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
+        GameStarted?.Invoke();
+        HighlightsHUD.DOFade(1f, 2f);
+        yield return new WaitForSeconds(0.3f);
         while (OpeningText.text.Length > 0)
         {
             OpeningText.text = OpeningText.text.Substring(0, OpeningText.text.Length - 1);
             yield return new WaitForSeconds(0.1f);
         }
 
-        ShownInGameHUD.DOFade(1, 0.5f);
+        ShownInGameHUD.DOFade(1, 2.5f);
         TimeRemaining = TimeForLevel;
         IsGameStarted = true;
             

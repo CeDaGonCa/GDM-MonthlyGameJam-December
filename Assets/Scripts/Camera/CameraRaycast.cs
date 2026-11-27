@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class CameraRaycast : MonoBehaviour
 {
+    public Vector2 ScaleRatio = new Vector2(1.5f, 1.3f);
     public float interactionDistance = 10f;
     public RectTransform highlight;
 
@@ -50,8 +51,13 @@ public class CameraRaycast : MonoBehaviour
             }
             
             currentTarget = hit.collider.gameObject;
+            BoxCollider boxCollider = currentTarget.GetComponent<BoxCollider>();
             Vector3 screenPos = cam.WorldToScreenPoint(currentTarget.transform.position);
             highlight.position = screenPos;
+            highlight.localScale = new Vector3(
+                boxCollider.size.x * ScaleRatio.x,
+                boxCollider.size.y * ScaleRatio.y,
+            1);
             
             highlight.gameObject.SetActive(true);
             highlight.GetChild(0).gameObject.SetActive(!miniGameTrigger.IsActive);

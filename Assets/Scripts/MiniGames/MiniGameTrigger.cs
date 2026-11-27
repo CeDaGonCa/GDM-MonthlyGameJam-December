@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
 public class MiniGameTrigger : MonoBehaviour
 {
+    public List<TriggerEffect> triggerEffects;
     [SerializeField] MinigameTaskData _minigameData;
     public MinigameTaskData MinigameData => _minigameData;
 
@@ -24,15 +26,26 @@ public class MiniGameTrigger : MonoBehaviour
         _isActive = false;
         if (FadeAfterCompletion)
             renderer.material.DOFade(0f, 2f);
+
+        foreach (TriggerEffect triggerEffect in triggerEffects)
+        {
+            triggerEffect.OnComplete();
+        }
     }
 
     public void OnHover()
     {
-        
+        foreach (TriggerEffect triggerEffect in triggerEffects)
+        {
+            triggerEffect.OnHover();
+        }
     }
 
     public void OnUnhover()
     {
-        
+        foreach (TriggerEffect triggerEffect in triggerEffects)
+        {
+            triggerEffect.OnUnhover();
+        }
     }
 }

@@ -18,6 +18,8 @@ public class BarCutGame : MinigameTypeController
     [SerializeField] GameObject Objective;
     private float barDimensions;
     private int currentHits = 0;
+    private bool isMoving = false;
+    
     private void Start()
     {
         barDimensions = Bar.transform.localScale.y / 2;
@@ -31,7 +33,7 @@ public class BarCutGame : MinigameTypeController
         base.MiniGameInstructions.text = $"{Instructions} {currentHits}/{_numOfHits} hits";
         currentHits = 0;
         UpdateColor();
-        Debug.Log("Starting game");
+        isMoving = true;
     }
     private void RandomizeObjective()
     {
@@ -43,6 +45,8 @@ public class BarCutGame : MinigameTypeController
     protected override void Update()
     {
         base.Update();
+
+        if (!isMoving) return;
         
         Pointer.transform.localPosition += direction * pointerSpeed * Time.deltaTime * Vector3.up;
         if (Pointer.transform.localPosition.y > barDimensions)
@@ -87,6 +91,7 @@ public class BarCutGame : MinigameTypeController
     }
     void GameWon()
     {
+        isMoving = false;
         Debug.Log("You won");
         FinishMiniGame();
     }
